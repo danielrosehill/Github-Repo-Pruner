@@ -12,7 +12,7 @@ class ConfigManager:
         """Ensure config directory and file exist"""
         self.config_dir.mkdir(parents=True, exist_ok=True)
         if not self.config_file.exists():
-            self._save_config({'base_path': None})
+            self._save_config({'base_path': None, 'github_token': None})
     
     def _save_config(self, config_data):
         """Save configuration to file"""
@@ -35,4 +35,15 @@ class ConfigManager:
             raise ValueError("Path does not exist or is not a directory")
         config = self._load_config()
         config['base_path'] = path
+        self._save_config(config)
+    
+    def get_github_token(self):
+        """Get the configured GitHub Personal Access Token"""
+        config = self._load_config()
+        return config.get('github_token')
+    
+    def set_github_token(self, token):
+        """Set the GitHub Personal Access Token"""
+        config = self._load_config()
+        config['github_token'] = token
         self._save_config(config)
